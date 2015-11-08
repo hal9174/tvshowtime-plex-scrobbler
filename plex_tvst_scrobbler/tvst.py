@@ -10,6 +10,7 @@ import logging
 import time
 import os
 import json
+import ssl
 
 
 class Tvst(object):
@@ -37,7 +38,8 @@ class Tvst(object):
         f = urllib2.Request(url)
         f.add_header('User-Agent', self.USER_AGENT)
         try:
-            res = urllib2.urlopen(f, data)
+            context = ssl._create_unverified_context()
+            res = urllib2.urlopen(f, data, context=context)
             return json.load(res)
         except urllib2.URLError, e:
             self.logger.error('Unable to submit post data {url} - {error}'.format(
